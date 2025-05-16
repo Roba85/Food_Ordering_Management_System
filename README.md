@@ -1,2 +1,2 @@
-# Food_Ordering_Management_System
+# Food Ordering Management System
 Developing a database management system using C# and ms sql server
