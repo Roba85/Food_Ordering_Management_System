@@ -1,0 +1,9 @@
+*.mdf     # SQL Server database file
+*.ldf     # SQL Server log file
+*.bak   
+*.suo 
+*.user   
+*.v12.suo
+*.db
+*.sqlite
+*.cache
