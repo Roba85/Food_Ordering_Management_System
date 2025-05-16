@@ -7,4 +7,6 @@
 *.db
 *.sqlite
 *.cache
-*.vs
+*.vs/
+*.DotSettings.user
+*.dbmdl
