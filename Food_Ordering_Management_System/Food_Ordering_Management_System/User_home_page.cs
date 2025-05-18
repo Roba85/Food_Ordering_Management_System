@@ -15,44 +15,41 @@ namespace Food_Ordering_Management_System
 {
     public partial class User_form : Form
     {
-        private SqlConnection sqlConnection;
         private List<String> categories = new List<string>();
 
         public User_form()
         {
             InitializeComponent();
-            
+
             TBMenuSearch.Leave += TBMenuSearch_Leave;
-            LBAutocomplete.Visible = false;
-            flowLayoutMeals.AutoScroll = true;
-            flowLayoutMeals.WrapContents = false;  // Optional: prevents wrapping and keeps vertical scroll only
-            flowLayoutMeals.FlowDirection = FlowDirection.TopDown;
             TBMenuSearch.KeyDown += TBMenuSearch_KeyDown;
-
-
+            LBAutocomplete.Visible = false;
+            
+        }
+        private void User_form_Load(object sender, EventArgs e)
+        {
+            InitialLoadMealsFromDatabase();
         }
 
         public void TBMenuSearch_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (sqlConnection.State != ConnectionState.Open)
-                    sqlConnection.Open();
-
-                btnClearFilters_Click(sender, e);
-                String searchText = TBMenuSearch.Text;
-
-
-                String query = "SELECT meal_id, category, season, is_available, price, name, description FROM Menu_items WHERE is_available = 'Y' AND name LIKE @meal_name";
-                using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
+                using (SqlConnection sqlConnection = new SqlConnection(Globals.ConnectionStirng))
                 {
-                    cmd.Parameters.AddWithValue("@meal_name", "%" + searchText + "%");
+                    sqlConnection.Open();
+                    btnClearFilters_Click(sender, e);
+                    String searchText = TBMenuSearch.Text;
 
-                    LoadMealsFromDatabase(cmd);
+                    String query = "SELECT meal_id, category, season, is_available, price, name, description FROM Menu_items WHERE is_available = 'Y' AND name LIKE @meal_name";
+                    using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
+                    {
+                        cmd.Parameters.AddWithValue("@meal_name", "%" + searchText + "%");
+                        LoadMealsFromDatabase(cmd, flowLayoutMeals);
+                    }
                 }
                 Console.WriteLine("HI!");
             }
-            
         }
 
         private void TBMenuSearch_Leave(object sender, EventArgs e)
@@ -61,38 +58,35 @@ namespace Food_Ordering_Management_System
                 LBAutocomplete.Visible = false;
         }
 
-        private void User_form_Load(object sender, EventArgs e)
-        {
-            sqlConnection = new SqlConnection(Globals.ConnectionStirng);
-            sqlConnection.Open();
-            InitialLoadMealsFromDatabase();
-        }
-
         private void TBMenuSearch_TextChanged(object sender, EventArgs e)
         {
-            if (sqlConnection.State != ConnectionState.Open)
-                sqlConnection.Open();
-
-            String searchText = TBMenuSearch.Text;
-
-            
-            String query = "SELECT name FROM Menu_items WHERE name LIKE @meal_name";
-            using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
+            using (SqlConnection sqlConnection = new SqlConnection(Globals.ConnectionStirng))
             {
-                cmd.Parameters.AddWithValue("@meal_name", "%" + searchText + "%");
+                sqlConnection.Open();
+                String searchText = TBMenuSearch.Text;
 
-                using(SqlDataReader reader = cmd.ExecuteReader())
+                String query = "SELECT name FROM Menu_items WHERE name LIKE @meal_name";
+                using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
                 {
-                    if (reader.HasRows)
-                    {
-                        LBAutocomplete.Items.Clear();
-                        LBAutocomplete.Visible = true;
-                    }
-                    else
-                        LBAutocomplete.Visible = false;
+                    cmd.Parameters.AddWithValue("@meal_name", "%" + searchText + "%");
 
-                    while (reader.Read())
-                        LBAutocomplete.Items.Add(reader.GetString(0));
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            LBAutocomplete.Items.Clear();
+                            LBAutocomplete.Visible = true;
+                        }
+                        else
+                        {
+                            LBAutocomplete.Visible = false;
+                        }
+
+                        while (reader.Read())
+                        {
+                            LBAutocomplete.Items.Add(reader.GetString(0));
+                        }
+                    }
                 }
             }
         }
@@ -102,29 +96,25 @@ namespace Food_Ordering_Management_System
             try
             {
                 flowLayoutMeals.Controls.Clear();
-
                 string query = "SELECT meal_id, category, season, is_available, price, name, description FROM Menu_items WHERE is_available = 'Y'";
 
+                using (SqlConnection sqlConnection = new SqlConnection(Globals.ConnectionStirng))
                 using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
                 {
-                    if (sqlConnection.State != ConnectionState.Open)
-                        sqlConnection.Open();
-
+                    sqlConnection.Open();
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             var mealCard = new MealCard();
-
                             mealCard.setMealCategory(reader["category"].ToString());
                             mealCard.setMealSeason(reader["season"].ToString());
-                            mealCard.setMealAvailable(reader["is_available"].ToString()[0]); // 'Y' or 'N'
+                            mealCard.setMealAvailable(reader["is_available"].ToString()[0]);
                             mealCard.setMealPrice(Convert.ToDecimal(reader["price"]));
                             mealCard.setMealName(reader["name"].ToString());
                             mealCard.setMealDescription(reader["description"].ToString());
-                            mealCard.setMealOrderBtnName(reader["meal_id"].ToString());
-                             
-
+                            mealCard.setMealId(Convert.ToInt32(reader["meal_id"]));
+                            mealCard.setFavoriteBtn();
                             flowLayoutMeals.Controls.Add(mealCard);
                         }
                     }
@@ -136,16 +126,13 @@ namespace Food_Ordering_Management_System
             }
         }
 
-        private void LoadMealsFromDatabase(SqlCommand cmd)
+        public void LoadMealsFromDatabase(SqlCommand cmd, FlowLayoutPanel flowLayoutMeals)
         {
             try
             {
                 flowLayoutMeals.Controls.Clear();
-
-                if (sqlConnection.State != ConnectionState.Open)
-                    sqlConnection.Open();
-
-                using (SqlDataReader  reader = cmd.ExecuteReader())
+                using (SqlConnection sqlConnection = cmd.Connection)
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     if (!reader.HasRows)
                     {
@@ -160,16 +147,14 @@ namespace Food_Ordering_Management_System
                     while (reader.Read())
                     {
                         var mealCard = new MealCard();
-
                         mealCard.setMealCategory(reader["category"].ToString());
                         mealCard.setMealSeason(reader["season"].ToString());
-                        mealCard.setMealAvailable(reader["is_available"].ToString()[0]); // 'Y' or 'N'
+                        mealCard.setMealAvailable(reader["is_available"].ToString()[0]);
                         mealCard.setMealPrice(Convert.ToDecimal(reader["price"]));
                         mealCard.setMealName(reader["name"].ToString());
                         mealCard.setMealDescription(reader["description"].ToString());
-                        mealCard.setMealOrderBtnName(reader["meal_id"].ToString());
-
-
+                        mealCard.setMealId(Convert.ToInt32(reader["meal_id"]));
+                        mealCard.setFavoriteBtn();
                         flowLayoutMeals.Controls.Add(mealCard);
                     }
                 }
@@ -184,45 +169,52 @@ namespace Food_Ordering_Management_System
         {
             decimal minPrice = decimal.TryParse(TBMinPrice.Text, out decimal minPriceInput) ? minPriceInput : 0;
             decimal maxPrice = decimal.TryParse(TBMaxPrice.Text, out decimal maxPriceInput) ? maxPriceInput : 100000;
-            string query;
-            SqlCommand cmd;
 
-            if (categories.Count == 0)
+            using (SqlConnection sqlConnection = new SqlConnection(Globals.ConnectionStirng))
             {
-                query = @" SELECT meal_id, category, season, is_available, price, name, description 
-                                FROM Menu_items
-                                WHERE is_available = 'Y'
-                                AND price >= @minPrice
-                                AND price <= @maxPrice";
-                cmd = new SqlCommand(query, sqlConnection);
+                sqlConnection.Open();
+                string query;
+                SqlCommand cmd;
+
+                if (categories.Count == 0)
+                {
+                    query = @"SELECT meal_id, category, season, is_available, price, name, description 
+                            FROM Menu_items
+                            WHERE is_available = 'Y'
+                            AND price >= @minPrice
+                            AND price <= @maxPrice";
+                    cmd = new SqlCommand(query, sqlConnection);
+                }
+                else
+                {
+                    var paramNames = categories.Select((cat, index) => $"@cat{index}").ToList();
+                    query = $@"SELECT meal_id, category, season, is_available, price, name, description 
+                            FROM Menu_items
+                            WHERE is_available = 'Y'
+                            AND category IN ({string.Join(",", paramNames)})
+                            AND price >= @minPrice
+                            AND price <= @maxPrice";
+
+                    cmd = new SqlCommand(query, sqlConnection);
+                    for (int i = 0; i < categories.Count; i++)
+                    {
+                        cmd.Parameters.AddWithValue(paramNames[i], categories[i]);
+                    }
+                }
+
+                cmd.Parameters.AddWithValue("@minPrice", minPrice);
+                cmd.Parameters.AddWithValue("@maxPrice", maxPrice);
+                LoadMealsFromDatabase(cmd, flowLayoutMeals);
             }
-            else
-            {
-                // Prepare parameter names and add parameters
-                var paramNames = categories.Select((cat, index) => $"@cat{index}").ToList();
-
-                query = $@" SELECT meal_id, category, season, is_available, price, name, description 
-                                FROM Menu_items
-                                WHERE is_available = 'Y'
-                                AND category IN ({string.Join(",", paramNames)})
-                                AND price >= @minPrice
-                                AND price <= @maxPrice";
-
-                cmd = new SqlCommand(query, sqlConnection);
-
-                for (int i = 0; i < categories.Count; i++)
-                    cmd.Parameters.AddWithValue(paramNames[i], categories[i]);
-            }
-
-            cmd.Parameters.AddWithValue("@minPrice", minPrice);
-            cmd.Parameters.AddWithValue("@maxPrice", maxPrice);
-
-            LoadMealsFromDatabase(cmd);
         }
 
         private void TBMinPrice_TextChanged(object sender, EventArgs e)
         {
             validate_Price(TBMinPrice);
+        }
+        private void TBMaxPrice_TextChanged(object sender, EventArgs e)
+        {
+            validate_Price(TBMaxPrice);
         }
 
         private void validate_Price(System.Windows.Forms.TextBox TB)
@@ -231,7 +223,7 @@ namespace Food_Ordering_Management_System
             {
                 String price = TB.Text;
 
-                if (price.Contains(".")) // e.g $10.15
+                if (price.Contains("."))
                 {
                     String dollars = price.Split('.')[0];
                     String cents = price.Split('.')[1];
@@ -253,37 +245,26 @@ namespace Food_Ordering_Management_System
                 MessageBox.Show("This is an invalid price !");
                 TB.Text = TB.Text.Substring(0, TB.Text.Length - 1);
                 TB.SelectionStart = TB.Text.Length;
-
             }
         }
-
-        private void TBMaxPrice_TextChanged(object sender, EventArgs e)
-        {
-            validate_Price(TBMaxPrice);
-        }
-
         private void LBAutocomplete_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (LBAutocomplete.SelectedItem != null)
             {
-
-                if (sqlConnection.State != ConnectionState.Open)
-                    sqlConnection.Open();
-
-                btnClearFilters_Click(sender, e);
-                String searchText = LBAutocomplete.SelectedItem.ToString(); ;
-
-
-                String query = "SELECT meal_id, category, season, is_available, price, name, description FROM Menu_items WHERE is_available = 'Y' AND name LIKE @meal_name";
-                using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
+                using (SqlConnection sqlConnection = new SqlConnection(Globals.ConnectionStirng))
                 {
-                    cmd.Parameters.AddWithValue("@meal_name", "%" + searchText + "%");
+                    sqlConnection.Open();
+                    btnClearFilters_Click(sender, e);
+                    String searchText = LBAutocomplete.SelectedItem.ToString();
 
-                    LoadMealsFromDatabase(cmd);
+                    String query = "SELECT meal_id, category, season, is_available, price, name, description FROM Menu_items WHERE is_available = 'Y' AND name LIKE @meal_name";
+                    using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
+                    {
+                        cmd.Parameters.AddWithValue("@meal_name", "%" + searchText + "%");
+                        LoadMealsFromDatabase(cmd, flowLayoutMeals);
+                    }
                 }
             }
-            
-
         }
 
         private void btnAppetizer_Click(object sender, EventArgs e)
@@ -312,10 +293,10 @@ namespace Food_Ordering_Management_System
 
         private void btnClearFilters_Click(object sender, EventArgs e)
         {
-            btnAppetizer.BackColor= SystemColors.Control;
-            btnMainCourse.BackColor= SystemColors.Control;
-            btnDessert.BackColor= SystemColors.Control;
-            btnDrink.BackColor= SystemColors.Control;
+            btnAppetizer.BackColor = SystemColors.Control;
+            btnMainCourse.BackColor = SystemColors.Control;
+            btnDessert.BackColor = SystemColors.Control;
+            btnDrink.BackColor = SystemColors.Control;
 
             categories.Clear();
 
@@ -334,6 +315,13 @@ namespace Food_Ordering_Management_System
         {
             Form User_profile_form = new User_profile();
             User_profile_form.Show();
+            this.Hide();
+        }
+
+        private void picCart_Click(object sender, EventArgs e)
+        {
+            Form Cart_form = new Cart();
+            Cart_form.Show();
             this.Hide();
         }
     }

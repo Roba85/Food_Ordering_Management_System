@@ -10,6 +10,7 @@ namespace Food_Ordering_Management_System
     {
         public static int User_id { get; set; }
         public static string Is_Admin { get; set; }
+        public static Dictionary<int, int> User_Cart = new Dictionary<int, int>();
         // public const string ConnectionStirng =
         //"Data Source=RORA;Initial Catalog=Food_Ordering_System;Integrated Security=True;";
 
@@ -27,7 +28,7 @@ namespace Food_Ordering_Management_System
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new User_form());
+            Application.Run(new User_home_page());
         }
     }
 }

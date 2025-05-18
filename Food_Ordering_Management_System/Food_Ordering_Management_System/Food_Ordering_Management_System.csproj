@@ -46,6 +46,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bill.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bill.Designer.cs">
+      <DependentUpon>Bill.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cart.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Cart.Designer.cs">
+      <DependentUpon>Cart.cs</DependentUpon>
+    </Compile>
     <Compile Include="Food_ordering_systemDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -62,6 +74,18 @@
     </Compile>
     <Compile Include="MealCard.Designer.cs">
       <DependentUpon>MealCard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OrderCard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OrderCard.Designer.cs">
+      <DependentUpon>OrderCard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OrderItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OrderItem.Designer.cs">
+      <DependentUpon>OrderItem.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -88,8 +112,20 @@
     <Compile Include="User_profile.Designer.cs">
       <DependentUpon>User_profile.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Bill.resx">
+      <DependentUpon>Bill.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cart.resx">
+      <DependentUpon>Cart.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MealCard.resx">
       <DependentUpon>MealCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OrderCard.resx">
+      <DependentUpon>OrderCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OrderItem.resx">
+      <DependentUpon>OrderItem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -131,6 +167,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\user %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shopping-cart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\back.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

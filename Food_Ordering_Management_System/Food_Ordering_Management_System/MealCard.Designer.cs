@@ -38,6 +38,7 @@
             this.lblMealAvailable = new System.Windows.Forms.Label();
             this.lblMealPrice = new System.Windows.Forms.Label();
             this.btnOrder = new System.Windows.Forms.Button();
+            this.btnAddFavorite = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblMealName
@@ -122,7 +123,7 @@
             // 
             this.lblMealPrice.AutoSize = true;
             this.lblMealPrice.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMealPrice.Location = new System.Drawing.Point(410, 21);
+            this.lblMealPrice.Location = new System.Drawing.Point(300, 19);
             this.lblMealPrice.Name = "lblMealPrice";
             this.lblMealPrice.Size = new System.Drawing.Size(98, 38);
             this.lblMealPrice.TabIndex = 9;
@@ -130,19 +131,32 @@
             // 
             // btnOrder
             // 
-            this.btnOrder.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOrder.Location = new System.Drawing.Point(407, 65);
+            this.btnOrder.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnOrder.Location = new System.Drawing.Point(452, 19);
             this.btnOrder.Name = "btnOrder";
-            this.btnOrder.Size = new System.Drawing.Size(158, 41);
+            this.btnOrder.Size = new System.Drawing.Size(132, 31);
             this.btnOrder.TabIndex = 10;
-            this.btnOrder.Text = "Order Now";
+            this.btnOrder.Text = "Add to cart";
             this.btnOrder.UseVisualStyleBackColor = true;
+            this.btnOrder.Click += new System.EventHandler(this.btnOrder_Click);
+            // 
+            // btnAddFavorite
+            // 
+            this.btnAddFavorite.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAddFavorite.Location = new System.Drawing.Point(527, 65);
+            this.btnAddFavorite.Name = "btnAddFavorite";
+            this.btnAddFavorite.Size = new System.Drawing.Size(57, 32);
+            this.btnAddFavorite.TabIndex = 12;
+            this.btnAddFavorite.Text = "♡";
+            this.btnAddFavorite.UseVisualStyleBackColor = true;
+            this.btnAddFavorite.Click += new System.EventHandler(this.btnAddFavorite_Click);
             // 
             // MealCard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.btnAddFavorite);
             this.Controls.Add(this.btnOrder);
             this.Controls.Add(this.lblMealPrice);
             this.Controls.Add(this.lblMealAvailable);
@@ -154,7 +168,7 @@
             this.Controls.Add(this.lblMealDescription);
             this.Controls.Add(this.lblMealName);
             this.Name = "MealCard";
-            this.Size = new System.Drawing.Size(578, 118);
+            this.Size = new System.Drawing.Size(596, 118);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -172,5 +186,6 @@
         private System.Windows.Forms.Label lblMealAvailable;
         private System.Windows.Forms.Label lblMealPrice;
         private System.Windows.Forms.Button btnOrder;
+        private System.Windows.Forms.Button btnAddFavorite;
     }
 }

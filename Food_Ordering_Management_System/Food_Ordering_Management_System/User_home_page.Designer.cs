@@ -35,7 +35,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.btnFullMenu = new System.Windows.Forms.Button();
             this.flowLayoutMeals = new System.Windows.Forms.FlowLayoutPanel();
-            this.picProfile = new System.Windows.Forms.PictureBox();
             this.btnClearFilters = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -47,6 +46,9 @@
             this.btnDrink = new System.Windows.Forms.Button();
             this.btnAppetizer = new System.Windows.Forms.Button();
             this.btnMainCourse = new System.Windows.Forms.Button();
+            this.picCart = new System.Windows.Forms.PictureBox();
+            this.picProfile = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.picCart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picProfile)).BeginInit();
             this.SuspendLayout();
             // 
@@ -114,22 +116,14 @@
             // 
             // flowLayoutMeals
             // 
+            this.flowLayoutMeals.AutoScroll = true;
             this.flowLayoutMeals.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.flowLayoutMeals.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutMeals.Location = new System.Drawing.Point(29, 244);
             this.flowLayoutMeals.Name = "flowLayoutMeals";
-            this.flowLayoutMeals.Size = new System.Drawing.Size(613, 377);
+            this.flowLayoutMeals.Size = new System.Drawing.Size(621, 377);
             this.flowLayoutMeals.TabIndex = 15;
-            // 
-            // picProfile
-            // 
-            this.picProfile.Image = global::Food_Ordering_Management_System.Properties.Resources.user__2_;
-            this.picProfile.Location = new System.Drawing.Point(791, 12);
-            this.picProfile.Name = "picProfile";
-            this.picProfile.Size = new System.Drawing.Size(50, 63);
-            this.picProfile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picProfile.TabIndex = 1;
-            this.picProfile.TabStop = false;
-            this.picProfile.Click += new System.EventHandler(this.picProfile_Click);
+            this.flowLayoutMeals.WrapContents = false;
             // 
             // btnClearFilters
             // 
@@ -249,11 +243,34 @@
             this.btnMainCourse.UseVisualStyleBackColor = false;
             this.btnMainCourse.Click += new System.EventHandler(this.btnMainCourse_Click);
             // 
+            // picCart
+            // 
+            this.picCart.Image = global::Food_Ordering_Management_System.Properties.Resources.shopping_cart;
+            this.picCart.Location = new System.Drawing.Point(702, 12);
+            this.picCart.Name = "picCart";
+            this.picCart.Size = new System.Drawing.Size(50, 63);
+            this.picCart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picCart.TabIndex = 33;
+            this.picCart.TabStop = false;
+            this.picCart.Click += new System.EventHandler(this.picCart_Click);
+            // 
+            // picProfile
+            // 
+            this.picProfile.Image = global::Food_Ordering_Management_System.Properties.Resources.user__2_;
+            this.picProfile.Location = new System.Drawing.Point(791, 12);
+            this.picProfile.Name = "picProfile";
+            this.picProfile.Size = new System.Drawing.Size(50, 63);
+            this.picProfile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picProfile.TabIndex = 1;
+            this.picProfile.TabStop = false;
+            this.picProfile.Click += new System.EventHandler(this.picProfile_Click);
+            // 
             // User_form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(882, 653);
+            this.Controls.Add(this.picCart);
             this.Controls.Add(this.btnMainCourse);
             this.Controls.Add(this.btnAppetizer);
             this.Controls.Add(this.btnDrink);
@@ -276,6 +293,7 @@
             this.Name = "User_form";
             this.Text = "User_form";
             this.Load += new System.EventHandler(this.User_form_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.picCart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picProfile)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -303,5 +321,6 @@
         private System.Windows.Forms.Button btnDrink;
         private System.Windows.Forms.Button btnAppetizer;
         private System.Windows.Forms.Button btnMainCourse;
+        private System.Windows.Forms.PictureBox picCart;
     }
 }
