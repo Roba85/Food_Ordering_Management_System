@@ -12,7 +12,12 @@ namespace Food_Ordering_Management_System.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.9.0.0")]
+//Haidy:
+//    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.9.0.0")]
+
+    // Roba
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.14.0.0")]
+// Roba's Configuration ends here
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -26,11 +31,17 @@ namespace Food_Ordering_Management_System.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=LAPTOP-78QNVUR1;Initial Catalog=Food_ordering_system;Integrated Secur" +
-            "ity=True;TrustServerCertificate=True")]
+        // Haidy's Connection String
+        //[global::System.Configuration.DefaultSettingValueAttribute("Data Source=LAPTOP-78QNVUR1;Initial Catalog=Food_ordering_system;Integrated Secur" +
+        //    "ity=True;TrustServerCertificate=True")]
+
+        // Roba's Connection String
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=RORA;Initial Catalog=Food_Ordering_System;Integrated Security=True;Tr" +
+            "ustServerCertificate=True")]
         public string Food_ordering_systemConnectionString {
             get {
                 return ((string)(this["Food_ordering_systemConnectionString"]));
+        
             }
         }
     }
