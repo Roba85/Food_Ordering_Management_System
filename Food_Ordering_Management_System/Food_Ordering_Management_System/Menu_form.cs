@@ -115,20 +115,23 @@ namespace Food_Ordering_Management_System
                 sqlConnection.Open();
                 string sql = "INSERT INTO Menu_items (category, season, is_available, price, name, description, admin_id)"
                         + "VALUES(@category, @season, @is_available, @price, @name, @description, @admin_id)";
-                SqlCommand cmd = new SqlCommand(sql, sqlConnection);
-                
-                cmd.Parameters.AddWithValue("@category", CategoryTxt.Text);
-                cmd.Parameters.AddWithValue("@season", SeasonTxt.Text);
-                    
-                cmd.Parameters.AddWithValue("@is_available", GetAvailableText());
-                cmd.Parameters.AddWithValue("@price", double.Parse(PriceTxt.Text));
-                cmd.Parameters.AddWithValue("@name", NameTxt.Text);
-                cmd.Parameters.AddWithValue("@description", DescriptionTxt.Text);
-                cmd.Parameters.AddWithValue("@admin_id", Globals.User_id);
-                cmd.ExecuteNonQuery();
+                using (SqlCommand cmd = new SqlCommand(sql, sqlConnection))
+                {
+
+                    cmd.Parameters.AddWithValue("@category", CategoryTxt.Text.ToString());
+                    cmd.Parameters.AddWithValue("@season", SeasonTxt.Text.ToString());
+
+                    cmd.Parameters.AddWithValue("@is_available", GetAvailableText());
+                    cmd.Parameters.AddWithValue("@price", double.Parse(PriceTxt.Text));
+                    cmd.Parameters.AddWithValue("@name", NameTxt.Text.ToString());
+                    cmd.Parameters.AddWithValue("@description", DescriptionTxt.Text.ToString());
+                    cmd.Parameters.AddWithValue("@admin_id", Globals.User_id);
+                    cmd.ExecuteNonQuery();
+                }
 
                 // Updating the grid
                 this.menu_itemsTableAdapter.Fill(this.food_Ordering_SystemDataSet.Menu_items);
+                PopulateIDComboBox();
 
                 sqlConnection.Close();
                 MessageBox.Show("Item added successfully!");
@@ -147,9 +150,11 @@ namespace Food_Ordering_Management_System
                 SqlConnection sqlConnection = new SqlConnection(Globals.ConnectionStirng);
                 sqlConnection.Open();
                 string sql = "DELETE FROM Menu_items WHERE meal_id = @meal_id";
-                SqlCommand cmd = new SqlCommand(sql, sqlConnection);
-                cmd.Parameters.AddWithValue("@meal_id", IdComboBox.SelectedValue);
-                cmd.ExecuteNonQuery();
+                using (SqlCommand cmd = new SqlCommand(sql, sqlConnection))
+                {
+                    cmd.Parameters.AddWithValue("@meal_id", IdComboBox.SelectedValue);
+                    cmd.ExecuteNonQuery();
+                }
 
                 // Updating the grid
                 this.menu_itemsTableAdapter.Fill(this.food_Ordering_SystemDataSet.Menu_items);
@@ -180,22 +185,26 @@ namespace Food_Ordering_Management_System
                     return;
                 }
 
-                int selectedId = Convert.ToInt32(IdComboBox.SelectedIndex);
+                int selectedId = Convert.ToInt32(IdComboBox.SelectedValue);
                 SqlConnection sqlConnection = new SqlConnection(Globals.ConnectionStirng);
                 sqlConnection.Open();
 
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Menu_items WHERE meal_id = @meal_id", sqlConnection);
-                cmd.Parameters.AddWithValue("@meal_id", selectedId);
-
-                SqlDataReader reader = cmd.ExecuteReader();
-                if (reader.Read())
+                using (SqlCommand cmd = new SqlCommand("SELECT * FROM Menu_items WHERE meal_id = @meal_id", sqlConnection))
                 {
-                    NameTxt.Text = reader["name"].ToString();
-                    DescriptionTxt.Text = reader["description"].ToString();
-                    PriceTxt.Text = reader["price"].ToString();
-                    SeasonTxt.Text = reader["season"].ToString();
-                    AvailableTxt.Text = reader["is_available"].ToString();
-                    CategoryTxt.Text = reader["category"].ToString();
+                    cmd.Parameters.AddWithValue("@meal_id", selectedId);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            NameTxt.Text = reader["name"].ToString();
+                            DescriptionTxt.Text = reader["description"].ToString();
+                            PriceTxt.Text = reader["price"].ToString();
+                            SeasonTxt.Text = reader["season"].ToString();
+                            AvailableTxt.Text = reader["is_available"].ToString();
+                            CategoryTxt.Text = reader["category"].ToString();
+                        }
+                    }
                 }
                 sqlConnection.Close();
 
@@ -213,21 +222,23 @@ namespace Food_Ordering_Management_System
                 if (EmptyFieldCheck()) throw new Exception("Name, Category, Available, Price, Description and Season field must be filled");
                 SqlConnection sqlConnection = new SqlConnection(Globals.ConnectionStirng);
                 sqlConnection.Open();
+                int selectedId = Convert.ToInt32(IdComboBox.SelectedValue);
                 string sql = "UPDATE Menu_items SET category = @category, season = @season, is_available = @is_available," +
                     "price = @price, name = @name, description = @description, admin_id = @admin_id WHERE meal_id = @meal_id";
-                        
-                SqlCommand cmd = new SqlCommand(sql, sqlConnection);
 
-                cmd.Parameters.AddWithValue("@category", CategoryTxt.Text);
-                cmd.Parameters.AddWithValue("@season", SeasonTxt.Text);
-                cmd.Parameters.AddWithValue("@meal_id", IdComboBox.SelectedValue);
-                cmd.Parameters.AddWithValue("@is_available", GetAvailableText());
-                cmd.Parameters.AddWithValue("@price", double.Parse(PriceTxt.Text));
-                cmd.Parameters.AddWithValue("@name", NameTxt.Text);
-                cmd.Parameters.AddWithValue("@description", DescriptionTxt.Text);
-                cmd.Parameters.AddWithValue("@admin_id", Globals.User_id);
-                cmd.ExecuteNonQuery();
+                using (SqlCommand cmd = new SqlCommand(sql, sqlConnection))
+                {
 
+                    cmd.Parameters.AddWithValue("@category", CategoryTxt.Text.ToString());
+                    cmd.Parameters.AddWithValue("@season", SeasonTxt.Text.ToString());
+                    cmd.Parameters.AddWithValue("@meal_id", selectedId);
+                    cmd.Parameters.AddWithValue("@is_available", GetAvailableText());
+                    cmd.Parameters.AddWithValue("@price", double.Parse(PriceTxt.Text));
+                    cmd.Parameters.AddWithValue("@name", NameTxt.Text.ToString());
+                    cmd.Parameters.AddWithValue("@description", DescriptionTxt.Text.ToString());
+                    cmd.Parameters.AddWithValue("@admin_id", Globals.User_id);
+                    cmd.ExecuteNonQuery();
+                }
                 // Updating the grid
                 this.menu_itemsTableAdapter.Fill(this.food_Ordering_SystemDataSet.Menu_items);
 
@@ -238,6 +249,13 @@ namespace Food_Ordering_Management_System
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void SwitchToCustomers_Click(object sender, EventArgs e)
+        {
+            
+            Globals.users_Admin_Form.Show();
+            this.Hide();
         }
     }
 }

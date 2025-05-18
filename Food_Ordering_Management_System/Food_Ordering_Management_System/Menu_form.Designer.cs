@@ -58,6 +58,8 @@
             this.DescriptionTxt = new System.Windows.Forms.TextBox();
             this.IdLabel = new System.Windows.Forms.Label();
             this.IdComboBox = new System.Windows.Forms.ComboBox();
+            this.SwitchToCustomers = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.menuitemsBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.food_Ordering_SystemDataSet)).BeginInit();
@@ -79,7 +81,7 @@
             this.descriptionDataGridViewTextBoxColumn,
             this.adminidDataGridViewTextBoxColumn});
             this.dataGridView1.DataSource = this.menuitemsBindingSource;
-            this.dataGridView1.Location = new System.Drawing.Point(29, 6);
+            this.dataGridView1.Location = new System.Drawing.Point(29, 63);
             this.dataGridView1.MinimumSize = new System.Drawing.Size(600, 300);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
@@ -178,7 +180,7 @@
             // AddBtn
             // 
             this.AddBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.AddBtn.Location = new System.Drawing.Point(75, 534);
+            this.AddBtn.Location = new System.Drawing.Point(75, 563);
             this.AddBtn.Name = "AddBtn";
             this.AddBtn.Size = new System.Drawing.Size(119, 42);
             this.AddBtn.TabIndex = 0;
@@ -189,7 +191,7 @@
             // DeleteBtn
             // 
             this.DeleteBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.DeleteBtn.Location = new System.Drawing.Point(661, 534);
+            this.DeleteBtn.Location = new System.Drawing.Point(661, 563);
             this.DeleteBtn.Name = "DeleteBtn";
             this.DeleteBtn.Size = new System.Drawing.Size(119, 42);
             this.DeleteBtn.TabIndex = 2;
@@ -200,7 +202,7 @@
             // EditBtn
             // 
             this.EditBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.EditBtn.Location = new System.Drawing.Point(383, 534);
+            this.EditBtn.Location = new System.Drawing.Point(383, 563);
             this.EditBtn.Name = "EditBtn";
             this.EditBtn.Size = new System.Drawing.Size(119, 42);
             this.EditBtn.TabIndex = 1;
@@ -212,7 +214,7 @@
             // 
             this.CategoryLabel.AutoSize = true;
             this.CategoryLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.CategoryLabel.Location = new System.Drawing.Point(319, 375);
+            this.CategoryLabel.Location = new System.Drawing.Point(319, 404);
             this.CategoryLabel.Name = "CategoryLabel";
             this.CategoryLabel.Size = new System.Drawing.Size(76, 20);
             this.CategoryLabel.TabIndex = 6;
@@ -221,7 +223,7 @@
             // CategoryTxt
             // 
             this.CategoryTxt.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.CategoryTxt.Location = new System.Drawing.Point(402, 372);
+            this.CategoryTxt.Location = new System.Drawing.Point(402, 401);
             this.CategoryTxt.Name = "CategoryTxt";
             this.CategoryTxt.Size = new System.Drawing.Size(143, 26);
             this.CategoryTxt.TabIndex = 5;
@@ -230,7 +232,7 @@
             // 
             this.SeasonLabel.AutoSize = true;
             this.SeasonLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.SeasonLabel.Location = new System.Drawing.Point(585, 375);
+            this.SeasonLabel.Location = new System.Drawing.Point(585, 404);
             this.SeasonLabel.Name = "SeasonLabel";
             this.SeasonLabel.Size = new System.Drawing.Size(65, 20);
             this.SeasonLabel.TabIndex = 8;
@@ -239,7 +241,7 @@
             // SeasonTxt
             // 
             this.SeasonTxt.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.SeasonTxt.Location = new System.Drawing.Point(675, 372);
+            this.SeasonTxt.Location = new System.Drawing.Point(675, 401);
             this.SeasonTxt.Name = "SeasonTxt";
             this.SeasonTxt.Size = new System.Drawing.Size(100, 26);
             this.SeasonTxt.TabIndex = 7;
@@ -248,7 +250,7 @@
             // 
             this.AvailableLabel.AutoSize = true;
             this.AvailableLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.AvailableLabel.Location = new System.Drawing.Point(585, 434);
+            this.AvailableLabel.Location = new System.Drawing.Point(585, 463);
             this.AvailableLabel.Name = "AvailableLabel";
             this.AvailableLabel.Size = new System.Drawing.Size(76, 20);
             this.AvailableLabel.TabIndex = 14;
@@ -257,7 +259,7 @@
             // AvailableTxt
             // 
             this.AvailableTxt.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.AvailableTxt.Location = new System.Drawing.Point(675, 431);
+            this.AvailableTxt.Location = new System.Drawing.Point(675, 460);
             this.AvailableTxt.Name = "AvailableTxt";
             this.AvailableTxt.Size = new System.Drawing.Size(100, 26);
             this.AvailableTxt.TabIndex = 13;
@@ -266,7 +268,7 @@
             // 
             this.PriceLabel.AutoSize = true;
             this.PriceLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.PriceLabel.Location = new System.Drawing.Point(319, 434);
+            this.PriceLabel.Location = new System.Drawing.Point(319, 463);
             this.PriceLabel.Name = "PriceLabel";
             this.PriceLabel.Size = new System.Drawing.Size(48, 20);
             this.PriceLabel.TabIndex = 12;
@@ -275,7 +277,7 @@
             // PriceTxt
             // 
             this.PriceTxt.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.PriceTxt.Location = new System.Drawing.Point(402, 431);
+            this.PriceTxt.Location = new System.Drawing.Point(402, 460);
             this.PriceTxt.Name = "PriceTxt";
             this.PriceTxt.Size = new System.Drawing.Size(143, 26);
             this.PriceTxt.TabIndex = 11;
@@ -284,7 +286,7 @@
             // 
             this.NameLabel.AutoSize = true;
             this.NameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.NameLabel.Location = new System.Drawing.Point(71, 431);
+            this.NameLabel.Location = new System.Drawing.Point(71, 460);
             this.NameLabel.Name = "NameLabel";
             this.NameLabel.Size = new System.Drawing.Size(53, 20);
             this.NameLabel.TabIndex = 10;
@@ -293,7 +295,7 @@
             // NameTxt
             // 
             this.NameTxt.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.NameTxt.Location = new System.Drawing.Point(131, 428);
+            this.NameTxt.Location = new System.Drawing.Point(131, 457);
             this.NameTxt.Name = "NameTxt";
             this.NameTxt.Size = new System.Drawing.Size(157, 26);
             this.NameTxt.TabIndex = 9;
@@ -302,7 +304,7 @@
             // 
             this.DescriptionLabel.AutoSize = true;
             this.DescriptionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.DescriptionLabel.Location = new System.Drawing.Point(71, 488);
+            this.DescriptionLabel.Location = new System.Drawing.Point(71, 517);
             this.DescriptionLabel.Name = "DescriptionLabel";
             this.DescriptionLabel.Size = new System.Drawing.Size(95, 20);
             this.DescriptionLabel.TabIndex = 16;
@@ -311,7 +313,7 @@
             // DescriptionTxt
             // 
             this.DescriptionTxt.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.DescriptionTxt.Location = new System.Drawing.Point(182, 482);
+            this.DescriptionTxt.Location = new System.Drawing.Point(182, 511);
             this.DescriptionTxt.Name = "DescriptionTxt";
             this.DescriptionTxt.Size = new System.Drawing.Size(593, 26);
             this.DescriptionTxt.TabIndex = 15;
@@ -320,7 +322,7 @@
             // 
             this.IdLabel.AutoSize = true;
             this.IdLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.IdLabel.Location = new System.Drawing.Point(71, 378);
+            this.IdLabel.Location = new System.Drawing.Point(71, 407);
             this.IdLabel.Name = "IdLabel";
             this.IdLabel.Size = new System.Drawing.Size(26, 20);
             this.IdLabel.TabIndex = 20;
@@ -330,18 +332,40 @@
             // 
             this.IdComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.IdComboBox.FormattingEnabled = true;
-            this.IdComboBox.Location = new System.Drawing.Point(131, 378);
+            this.IdComboBox.Location = new System.Drawing.Point(131, 407);
             this.IdComboBox.Name = "IdComboBox";
             this.IdComboBox.Size = new System.Drawing.Size(157, 28);
             this.IdComboBox.TabIndex = 21;
             this.IdComboBox.Text = "Edit/Delete by ID";
             this.IdComboBox.SelectedIndexChanged += new System.EventHandler(this.IdComboBox_SelectedIndexChanged);
             // 
+            // SwitchToCustomers
+            // 
+            this.SwitchToCustomers.Location = new System.Drawing.Point(738, 618);
+            this.SwitchToCustomers.Name = "SwitchToCustomers";
+            this.SwitchToCustomers.Size = new System.Drawing.Size(132, 23);
+            this.SwitchToCustomers.TabIndex = 22;
+            this.SwitchToCustomers.Text = "Go to Customers";
+            this.SwitchToCustomers.UseVisualStyleBackColor = true;
+            this.SwitchToCustomers.Click += new System.EventHandler(this.SwitchToCustomers_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F);
+            this.label1.Location = new System.Drawing.Point(349, 11);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(194, 39);
+            this.label1.TabIndex = 23;
+            this.label1.Text = "Menu Items";
+            // 
             // Menu_form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(882, 653);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.SwitchToCustomers);
             this.Controls.Add(this.IdComboBox);
             this.Controls.Add(this.IdLabel);
             this.Controls.Add(this.DescriptionLabel);
@@ -402,5 +426,7 @@
         private System.Windows.Forms.TextBox DescriptionTxt;
         private System.Windows.Forms.Label IdLabel;
         private System.Windows.Forms.ComboBox IdComboBox;
+        private System.Windows.Forms.Button SwitchToCustomers;
+        private System.Windows.Forms.Label label1;
     }
 }
