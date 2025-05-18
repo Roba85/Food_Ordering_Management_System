@@ -1,12 +1,36 @@
-*.mdf     # SQL Server database file
-*.ldf     # SQL Server log file
-*.bak   
-*.suo 
-*.user   
-*.v12.suo
+# Database files
+*.mdf
+*.ldf
+*.bak
 *.db
 *.sqlite
-*.cache
-*.vs/
+
+# Visual Studio user-specific files
+*.suo
+*.user
+*.v12.suo
 *.DotSettings.user
 *.dbmdl
+
+# Build/compilation artifacts
+*.cache
+bin/
+obj/
+*.pdb
+*.exe
+*.dll
+*.resources
+
+# IDE/Editor folders
+.vs/
+
+# Added essentials for C# projects
+[Bb]in/
+[Oo]bj/
+packages/
+TestResults/
+*.nupkg
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.VC.opendb
