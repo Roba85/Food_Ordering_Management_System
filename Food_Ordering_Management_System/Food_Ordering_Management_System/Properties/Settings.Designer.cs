@@ -12,7 +12,11 @@ namespace Food_Ordering_Management_System.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+<<<<<<< HEAD
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.9.0.0")]
+=======
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.14.0.0")]
+>>>>>>> 26ce26b (Finished Menu-Admin)
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -26,11 +30,19 @@ namespace Food_Ordering_Management_System.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+<<<<<<< HEAD
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=LAPTOP-78QNVUR1;Initial Catalog=Food_ordering_system;Integrated Secur" +
             "ity=True;TrustServerCertificate=True")]
         public string Food_ordering_systemConnectionString {
             get {
                 return ((string)(this["Food_ordering_systemConnectionString"]));
+=======
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=RORA;Initial Catalog=Food_Ordering_System;Integrated Security=True;Tr" +
+            "ustServerCertificate=True")]
+        public string Food_Ordering_SystemConnectionString {
+            get {
+                return ((string)(this["Food_Ordering_SystemConnectionString"]));
+>>>>>>> 26ce26b (Finished Menu-Admin)
             }
         }
     }
