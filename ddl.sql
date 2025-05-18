@@ -7,6 +7,7 @@ IF OBJECT_ID('dbo.Feedback', 'U') IS NOT NULL DROP TABLE dbo.Feedback;
 IF OBJECT_ID('dbo.Order_', 'U') IS NOT NULL DROP TABLE dbo.Order_;
 IF OBJECT_ID('dbo.customer_favorites', 'U') IS NOT NULL DROP TABLE dbo.customer_favorites;
 IF OBJECT_ID('dbo.Menu_items', 'U') IS NOT NULL DROP TABLE dbo.Menu_items;
+IF OBJECT_ID('dbo.Admin_phones', 'U') IS NOT NULL DROP TABLE dbo.Admin_phones; -- ?? Add this
 IF OBJECT_ID('dbo.Admin', 'U') IS NOT NULL DROP TABLE dbo.Admin;
 IF OBJECT_ID('dbo.Customer_phones', 'U') IS NOT NULL DROP TABLE dbo.Customer_phones;
 IF OBJECT_ID('dbo.Customer', 'U') IS NOT NULL DROP TABLE dbo.Customer;
@@ -40,7 +41,7 @@ CREATE TABLE Customer_phones
   phone VARCHAR(15) NOT NULL,
   customer_id INT NOT NULL,
   PRIMARY KEY (phone, customer_id),
-  FOREIGN KEY (customer_id) REFERENCES Customer(customer_id)
+  FOREIGN KEY (customer_id) REFERENCES Customer(customer_id) ON DELETE CASCADE
 );
 
 go
@@ -51,11 +52,20 @@ CREATE TABLE Admin
   admin_name VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
-  branch_id INT NOT NULL,
+  branch_id INT,
   PRIMARY KEY (admin_id),
-  FOREIGN KEY (branch_id) REFERENCES Branches(branch_id)
+  FOREIGN KEY (branch_id) REFERENCES Branches(branch_id) ON DELETE SET NULL
 );
 
+go
+
+CREATE TABLE Admin_phones
+(
+  phone VARCHAR(15) NOT NULL,
+  admin_id INT NOT NULL,
+  PRIMARY KEY (phone, admin_id),
+  FOREIGN KEY (admin_id) REFERENCES Admin(admin_id) ON DELETE CASCADE
+);
 go
 
 CREATE TABLE Menu_items
@@ -67,9 +77,9 @@ CREATE TABLE Menu_items
   price REAL NOT NULL,
   name VARCHAR(255) NOT NULL,
   description VARCHAR(500) NOT NULL,
-  admin_id INT NOT NULL,
+  admin_id INT,
   PRIMARY KEY (meal_id),
-  FOREIGN KEY (admin_id) REFERENCES Admin(admin_id)
+  FOREIGN KEY (admin_id) REFERENCES Admin(admin_id) ON DELETE SET NULL
 );
 
 
@@ -81,8 +91,8 @@ CREATE TABLE customer_favorites
   customer_id INT NOT NULL,
   meal_id INT NOT NULL,
   PRIMARY KEY (customer_id, meal_id),
-  FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
-  FOREIGN KEY (meal_id) REFERENCES Menu_items(meal_id)
+  FOREIGN KEY (customer_id) REFERENCES Customer(customer_id) ON DELETE CASCADE,
+  FOREIGN KEY (meal_id) REFERENCES Menu_items(meal_id) ON DELETE CASCADE
 );
 
 go
@@ -95,11 +105,11 @@ CREATE TABLE Order_
   tax REAL NOT NULL,
   payment_method VARCHAR(50) NOT NULL,
   sub_total FLOAT NOT NULL,
-  branch_id INT NOT NULL,
+  branch_id INT,
   customer_id INT NOT NULL,
   PRIMARY KEY (order_id),
-  FOREIGN KEY (branch_id) REFERENCES Branches(branch_id),
-  FOREIGN KEY (customer_id) REFERENCES Customer(customer_id)
+  FOREIGN KEY (branch_id) REFERENCES Branches(branch_id) ON DELETE SET NULL,
+  FOREIGN KEY (customer_id) REFERENCES Customer(customer_id) ON DELETE CASCADE
 );
 
 go
@@ -113,7 +123,7 @@ CREATE TABLE Feedback
   review VARCHAR(500) NOT NULL,
   customer_id INT NOT NULL,
   PRIMARY KEY (feedback_id),
-  FOREIGN KEY (customer_id) REFERENCES Customer(customer_id)
+  FOREIGN KEY (customer_id) REFERENCES Customer(customer_id) ON DELETE CASCADE
 );
 
 
@@ -126,8 +136,8 @@ CREATE TABLE Order_items
   order_id INT NOT NULL,
   meal_id INT NOT NULL,
   PRIMARY KEY (order_id, meal_id),
-  FOREIGN KEY (order_id) REFERENCES Order_(order_id),
-  FOREIGN KEY (meal_id) REFERENCES Menu_items(meal_id)
+  FOREIGN KEY (order_id) REFERENCES Order_(order_id) ON DELETE CASCADE,
+  FOREIGN KEY (meal_id) REFERENCES Menu_items(meal_id) ON DELETE CASCADE
 );
 
 go
@@ -345,7 +355,16 @@ VALUES
 ( '2025-05-18', 5, 'Excellent service! Friendly delivery guy.', 5);
 
 
-
+INSERT INTO Admin_phones (admin_id, phone)
+VALUES
+(1, '6841236'),
+(2, '1234567'),
+(3, '2345678'),
+(4, '3456789'),
+(5, '4567891'),
+(5, '5678912'),
+(6, '6789123');
+go
 ----------------------------- show all columns ------------------
 select * from Branches
 select * from Customer
@@ -356,6 +375,7 @@ select *from Feedback
 select*from Order_items
 select * from Order_
 select *from Menu_items
+select *from Admin_phones
 
 
 
