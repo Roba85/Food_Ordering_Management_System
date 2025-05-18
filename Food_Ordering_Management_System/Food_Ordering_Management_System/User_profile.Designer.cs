@@ -172,6 +172,7 @@
             this.btnDeleteProfile.TabIndex = 13;
             this.btnDeleteProfile.Text = "Delete Profile";
             this.btnDeleteProfile.UseVisualStyleBackColor = true;
+            this.btnDeleteProfile.Click += new System.EventHandler(this.btnDeleteProfile_Click);
             // 
             // picBack
             // 

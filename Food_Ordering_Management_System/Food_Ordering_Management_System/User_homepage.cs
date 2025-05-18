@@ -13,11 +13,11 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Food_Ordering_Management_System
 {
-    public partial class User_form : Form
+    public partial class User_homepage : Form
     {
         private List<String> categories = new List<string>();
 
-        public User_form()
+        public User_homepage()
         {
             InitializeComponent();
 
@@ -31,6 +31,7 @@ namespace Food_Ordering_Management_System
             InitialLoadMealsFromDatabase();
         }
 
+        // When enter is pressed while searching
         public void TBMenuSearch_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -52,12 +53,14 @@ namespace Food_Ordering_Management_System
             }
         }
 
+        // Hide the autocomplete part whenever not used
         private void TBMenuSearch_Leave(object sender, EventArgs e)
         {
             if (!LBAutocomplete.Focused)
                 LBAutocomplete.Visible = false;
         }
 
+        // Automatically update the suggestions when a new serch text is there
         private void TBMenuSearch_TextChanged(object sender, EventArgs e)
         {
             using (SqlConnection sqlConnection = new SqlConnection(Globals.ConnectionStirng))
@@ -76,21 +79,22 @@ namespace Food_Ordering_Management_System
                         {
                             LBAutocomplete.Items.Clear();
                             LBAutocomplete.Visible = true;
+
+                            while (reader.Read())
+                            {
+                                LBAutocomplete.Items.Add(reader.GetString(0));
+                            }
                         }
                         else
                         {
                             LBAutocomplete.Visible = false;
-                        }
-
-                        while (reader.Read())
-                        {
-                            LBAutocomplete.Items.Add(reader.GetString(0));
                         }
                     }
                 }
             }
         }
 
+        // First load with every meal in the database
         private void InitialLoadMealsFromDatabase()
         {
             try
@@ -126,6 +130,7 @@ namespace Food_Ordering_Management_System
             }
         }
 
+        // Load spesific meals form the database and into a spesific container
         public void LoadMealsFromDatabase(SqlCommand cmd, FlowLayoutPanel flowLayoutMeals)
         {
             try
@@ -165,6 +170,7 @@ namespace Food_Ordering_Management_System
             }
         }
 
+        // Gather the selected filters and apply them and show results
         private void btnApplyFilters_Click(object sender, EventArgs e)
         {
             decimal minPrice = decimal.TryParse(TBMinPrice.Text, out decimal minPriceInput) ? minPriceInput : 0;
@@ -207,7 +213,7 @@ namespace Food_Ordering_Management_System
                 LoadMealsFromDatabase(cmd, flowLayoutMeals);
             }
         }
-
+       
         private void TBMinPrice_TextChanged(object sender, EventArgs e)
         {
             validate_Price(TBMinPrice);
@@ -247,6 +253,7 @@ namespace Food_Ordering_Management_System
                 TB.SelectionStart = TB.Text.Length;
             }
         }
+        // Show the meal results according to what the user chose form the suggestions
         private void LBAutocomplete_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (LBAutocomplete.SelectedItem != null)

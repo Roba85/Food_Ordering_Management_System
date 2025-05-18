@@ -13,7 +13,7 @@ namespace Food_Ordering_Management_System
 {
     public partial class Cart : Form
     {
-        decimal sub_total;
+        private decimal sub_total;
         public Cart()
         {
             InitializeComponent();
@@ -57,14 +57,11 @@ namespace Food_Ordering_Management_System
         {
             Globals.User_Cart.Clear();
             LoadOrderItems();
-            calculateTotal();
+            lblTotalOrder.Text = 0.ToString("C");
         }
 
         public void calculateTotal()
         {
-
-            
-
             foreach (OrderItem item in flowLayoutCart.Controls.OfType<OrderItem>())
             {
                 sub_total += item.getItemPrice() * item.getQty();
@@ -94,6 +91,8 @@ namespace Food_Ordering_Management_System
 
         private void btnConfirmOrder_Click(object sender, EventArgs e)
         {
+            if (Globals.User_Cart.Count == 0) { return; }
+
             using (SqlConnection sqlConnection = new SqlConnection(Globals.ConnectionStirng))
             {
                 sqlConnection.Open();
@@ -108,7 +107,7 @@ namespace Food_Ordering_Management_System
                     cmd.Parameters.AddWithValue("@total", sub_total + sub_total * 0.07m);
                     cmd.Parameters.AddWithValue("@tax", sub_total * 0.07m);
                     cmd.Parameters.AddWithValue("@sub_total", sub_total);
-                    cmd.Parameters.AddWithValue("@user_id", /*Globals.User_id*/ 1);
+                    cmd.Parameters.AddWithValue("@user_id", Globals.User_id);
 
                     int newOrderId = Convert.ToInt32(cmd.ExecuteScalar());
 
@@ -157,7 +156,7 @@ namespace Food_Ordering_Management_System
 
         private void picBack_Click(object sender, EventArgs e)
         {
-            Form user_form = new User_home_page();
+            Form user_form = new User_homepage();
             user_form.Show();
             this.Hide();
         }

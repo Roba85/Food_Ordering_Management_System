@@ -13,7 +13,6 @@ namespace Food_Ordering_Management_System
 {
     public partial class User_profile : Form
     {
-        private int user_id = 2;
         public User_profile()
         {
             InitializeComponent();
@@ -35,7 +34,7 @@ namespace Food_Ordering_Management_System
                                     AND Customer_phones.customer_id = @user_id";
                     using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
                     {
-                        cmd.Parameters.AddWithValue("@user_id", user_id);
+                        cmd.Parameters.AddWithValue("@user_id", Globals.User_id);
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             reader.Read();
@@ -50,7 +49,7 @@ namespace Food_Ordering_Management_System
             }
             catch 
             {
-                MessageBox.Show("Make sure you are loggin in first");
+                MessageBox.Show("Make sure you are logged in first");
             }
 
         }
@@ -65,10 +64,10 @@ namespace Food_Ordering_Management_System
 
                 using (SqlCommand cmd =  new SqlCommand(query, sqlConnection))
                 {
-                    cmd.Parameters.AddWithValue("@user_id", user_id);
+                    cmd.Parameters.AddWithValue("@user_id", Globals.User_id);
                     sqlConnection.Open();
 
-                    User_form User_form = new User_form();
+                    User_homepage User_form = new User_homepage();
 
                     User_form.LoadMealsFromDatabase(cmd, flowLayoutFavorite);
                 }
@@ -92,7 +91,7 @@ namespace Food_Ordering_Management_System
 
                 using (var lastCmd = new SqlCommand(lastOrderSql, sqlConnection))
                 {
-                    lastCmd.Parameters.AddWithValue("@user_id", user_id);
+                    lastCmd.Parameters.AddWithValue("@user_id", Globals.User_id);
                     object result = lastCmd.ExecuteScalar();
                     if (result != null && result != DBNull.Value)
                         lastOrderId = Convert.ToInt32(result);
@@ -105,7 +104,7 @@ namespace Food_Ordering_Management_System
 
                 using (var cmd = new SqlCommand(ordersSql, sqlConnection))
                 {
-                    cmd.Parameters.AddWithValue("@user_id", user_id);
+                    cmd.Parameters.AddWithValue("@user_id", Globals.User_id);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -143,7 +142,7 @@ namespace Food_Ordering_Management_System
 
                 using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
                 {
-                    cmd.Parameters.AddWithValue("@user_id", user_id);
+                    cmd.Parameters.AddWithValue("@user_id", Globals.User_id);
                     sqlConnection.Open();
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
@@ -291,7 +290,7 @@ namespace Food_Ordering_Management_System
 
                 using (SqlCommand cmd = new SqlCommand(sql, sqlConnection))
                 {
-                    cmd.Parameters.AddWithValue("@user_id", user_id);
+                    cmd.Parameters.AddWithValue("@user_id", Globals.User_id);
                     cmd.Parameters.AddWithValue("@review", review);
                     cmd.Parameters.AddWithValue("@rate", rate);
                     cmd.Parameters.AddWithValue("@date", DateTime.Now);
@@ -306,11 +305,11 @@ namespace Food_Ordering_Management_System
 
         private void UpdateFeedback(int feedbackId, string review, int rate)
         {
-            using (SqlConnection conn = new SqlConnection(Globals.ConnectionStirng))
+            using (SqlConnection sqlConnection = new SqlConnection(Globals.ConnectionStirng))
             {
-                conn.Open();
+                sqlConnection.Open();
                 using (SqlCommand cmd = new SqlCommand(
-                    "UPDATE Feedback SET review = @review, rate = @rate WHERE feedback_id = @id", conn))
+                    "UPDATE Feedback SET review = @review, rate = @rate WHERE feedback_id = @id", sqlConnection))
                 {
                     cmd.Parameters.AddWithValue("@review", review);
                     cmd.Parameters.AddWithValue("@rate", rate);
@@ -323,10 +322,10 @@ namespace Food_Ordering_Management_System
 
         private void DeleteFeedback(int feedbackId)
         {
-            using (SqlConnection conn = new SqlConnection(Globals.ConnectionStirng))
+            using (SqlConnection sqlConnection = new SqlConnection(Globals.ConnectionStirng))
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand("DELETE FROM Feedback WHERE feedback_id = @id", conn))
+                sqlConnection.Open();
+                using (SqlCommand cmd = new SqlCommand("DELETE FROM Feedback WHERE feedback_id = @id", sqlConnection))
                 {
                     cmd.Parameters.AddWithValue("@id", feedbackId);
                     cmd.ExecuteNonQuery();
@@ -351,14 +350,132 @@ namespace Food_Ordering_Management_System
 
         private void btnUpdateProfile_Click(object sender, EventArgs e)
         {
-            
+            if (!TBUsername.Enabled)
+            {
+                TBUsername.Enabled = TBEmail.Enabled =
+                TBAddress.Enabled = TBPhone.Enabled = true;
+
+                btnUpdateProfile.Text = "Save";
+                return;
+            }
+
+            string userName = TBUsername.Text.Trim();
+            string email = TBEmail.Text.Trim();
+            string address = TBAddress.Text.Trim();
+            string phone = TBPhone.Text.Trim();
+
+            // simple validation
+            if (userName == "" || email == "" || address == "" || phone == "")
+            {
+                MessageBox.Show("All fields are required.", "Validation",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (SqlConnection conn = new SqlConnection(Globals.ConnectionStirng))
+            {
+                conn.Open();
+
+                try
+                {
+                    // 2-a) update Customer
+                    string sqlUpdateCustomer = @" UPDATE Customer SET 
+                                                    customer_name = @name,
+                                                    email = @mail,
+                                                    address = @addr
+                                                    WHERE  customer_id  = @user_id;";
+
+                    using (SqlCommand cmd = new SqlCommand(sqlUpdateCustomer, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@name", userName);
+                        cmd.Parameters.AddWithValue("@mail", email);
+                        cmd.Parameters.AddWithValue("@addr", address);
+                        cmd.Parameters.AddWithValue("@user_id", Globals.User_id);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    string sqlDeleteFirstPhone = @" ;WITH cte AS (
+                                                        SELECT TOP (1) phone
+                                                        FROM   Customer_phones
+                                                        WHERE  customer_id = @user_id
+                                                    )
+                                                    DELETE FROM Customer_phones
+                                                    WHERE customer_id = @user_id
+                                                    AND phone IN (SELECT phone FROM cte);";
+
+                    using (SqlCommand cmdDel = new SqlCommand(sqlDeleteFirstPhone, conn))
+                    {
+                        cmdDel.Parameters.AddWithValue("@user_id", Globals.User_id);
+                        cmdDel.ExecuteNonQuery();
+                    }
+
+                    string sqlInsertPhone = @"INSERT INTO Customer_phones (phone, customer_id)
+                                               VALUES (@phone, @user_id);";
+
+                    using (SqlCommand cmdIns = new SqlCommand(sqlInsertPhone, conn))
+                    {
+                        cmdIns.Parameters.AddWithValue("@phone", phone);
+                        cmdIns.Parameters.AddWithValue("@user_id", Globals.User_id);
+                        cmdIns.ExecuteNonQuery();
+                    }
+
+                    MessageBox.Show("Profile updated successfully.", "Success",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // switch back to read-only mode
+                    TBUsername.Enabled = TBEmail.Enabled =
+                    TBAddress.Enabled = TBPhone.Enabled = false;
+                    btnUpdateProfile.Text = "Update Profile";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error updating profile:\n" + ex.Message,
+                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void picBack_Click(object sender, EventArgs e)
         {
-            Form user_form = new User_form();
+            Form user_form = new User_homepage();
             user_form.Show();
             this.Hide();
+        }
+
+        private void btnDeleteProfile_Click(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show("Are you sure you want to delete your profile? This cannot be undone.",
+                                         "Confirm Deletion",
+                                         MessageBoxButtons.YesNo,
+                                         MessageBoxIcon.Warning);
+
+            if (result == DialogResult.Yes)
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(Globals.ConnectionStirng))
+                {
+                    sqlConnection.Open();
+
+                    try
+                    {
+                        // Finally, delete the user
+                        SqlCommand deleteUser = new SqlCommand(
+                            "DELETE FROM Customer WHERE customer_id = @user_id", sqlConnection);
+                        deleteUser.Parameters.AddWithValue("@user_id", Globals.User_id);
+                        deleteUser.ExecuteNonQuery();
+
+
+                        MessageBox.Show("Profile deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        Application.Exit();
+                        this.Close();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error while deleting profile: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
         }
     }
 }

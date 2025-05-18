@@ -1,6 +1,6 @@
 ﻿namespace Food_Ordering_Management_System
 {
-    partial class User_form
+    partial class User_homepage
     {
         /// <summary>
         /// Required designer variable.

@@ -14,7 +14,6 @@ namespace Food_Ordering_Management_System
     public partial class MealCard : UserControl
     {
         private int meal_id;
-        private int user_id = 2;
         public MealCard()
         {
             InitializeComponent();
@@ -47,12 +46,6 @@ namespace Food_Ordering_Management_System
                 return;
             }
 
-            if (user_id <= 0)
-            {
-                MessageBox.Show("Please login first");
-                return;
-            }
-
             using (SqlConnection sqlConnection = new SqlConnection(Globals.ConnectionStirng))
             {
                 try
@@ -65,7 +58,7 @@ namespace Food_Ordering_Management_System
 
                     using (SqlCommand checkCmd = new SqlCommand(checkQuery, sqlConnection))
                     {
-                        checkCmd.Parameters.AddWithValue("@customer_id", user_id);
+                        checkCmd.Parameters.AddWithValue("@customer_id", Globals.User_id);
                         checkCmd.Parameters.AddWithValue("@meal_id", meal_id);
                         alreadyFavorited = (int)checkCmd.ExecuteScalar() > 0;
                     }
@@ -94,7 +87,7 @@ namespace Food_Ordering_Management_System
                 return;
             }
 
-            if (user_id <= 0)
+            if (Globals.User_id <= 0)
             {
                 MessageBox.Show("Please login first");
                 return;
@@ -112,7 +105,7 @@ namespace Food_Ordering_Management_System
 
                     using (SqlCommand checkCmd = new SqlCommand(checkQuery, sqlConnection))
                     {
-                        checkCmd.Parameters.AddWithValue("@customer_id", user_id);
+                        checkCmd.Parameters.AddWithValue("@customer_id", Globals.User_id);
                         checkCmd.Parameters.AddWithValue("@meal_id", meal_id);
                         alreadyFavorited = (int)checkCmd.ExecuteScalar() > 0;
                     }
@@ -124,7 +117,7 @@ namespace Food_Ordering_Management_System
 
                     using (SqlCommand cmd = new SqlCommand(operationQuery, sqlConnection))
                     {
-                        cmd.Parameters.AddWithValue("@customer_id", user_id);
+                        cmd.Parameters.AddWithValue("@customer_id", Globals.User_id);
                         cmd.Parameters.AddWithValue("@meal_id", meal_id);
                         int rowsAffected = cmd.ExecuteNonQuery();
 
