@@ -124,7 +124,6 @@ namespace Food_Ordering_Management_System
                         if (rowsAffected > 0)
                         {
                             btnAddFavorite.Text = alreadyFavorited ? "♡" : "♥";
-                            MessageBox.Show(alreadyFavorited ? "Removed from favorites" : "Added to favorites!");
                         }
                     }
                 }
